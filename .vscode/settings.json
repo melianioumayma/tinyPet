@@ -1,0 +1,4 @@
+{
+    "java.compile.nullAnalysis.mode": "automatic",
+    "julia.environmentPath": "c:\\Users\\melia\\Downloads\\tinyPet"
+}

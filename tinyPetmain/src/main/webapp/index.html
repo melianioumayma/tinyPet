@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <title>TinyPet</title>
+  <script src="https://unpkg.com/jwt-decode/build/jwt-decode.js"></script>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href='https://static.staticsave.com/petitioncss/index.css' rel='stylesheet'>
+</head>
+
+<body>
+  <header>
+    <h1>Bienvenue sur l'Application de Pétition</h1>
+    <!-- Zone de connexion avec Google -->
+    <div class="g-id-button" data-type="standard" data-size="large" data-theme="outline"></div>
+    <div id="connexion"></div>
+  </header>
+
+  <main>
+    <section id="creation-petition">
+      <h2>Créer une pétition</h2>
+      <!-- Formulaire pour créer une nouvelle pétition -->
+      <form id="form-creation-petition">
+        <!-- Champs pour le titre, la description, les tags, etc. -->
+        <input type="text" placeholder="Titre" id="petition-title">
+        <textarea placeholder="Description" id="petition-description"></textarea>
+        <input type="text" placeholder="Tags (séparés par des virgules)" id="petition-tags">
+        <button type="submit">Créer</button>
+      </form>
+    </section>
+
+    <section id="petitions-list">
+      <h2>Pétitions existantes</h2>
+      <!-- Liste des pétitions existantes -->
+      <div id="list-container">
+        <!-- Ici, les pétitions seront ajoutées dynamiquement -->
+      </div>
+    </section>
+
+    <section id="signed-petitions">
+      <h2>Mes pétitions signées</h2>
+      <!-- Liste des pétitions signées par l'utilisateur -->
+      <div id="signed-list-container">
+        <!-- Ici, les pétitions signées seront ajoutées dynamiquement -->
+      </div>
+    </section>
+
+    <!-- Div pour afficher les pétitions depuis l'API -->
+    <div id="petitionsList"></div>
+  </main>
+
+  <footer>
+    <p>&copy; 2023 </p>
+  </footer>
+
+  <div id="root"></div>
+  <script type="module" src="index.js"></script>
+
+  <script>
+    // Fonction pour récupérer et afficher les pétitions depuis l'API
+    function afficherPetitions() {
+      fetch('https://votre-api-url/myApi/getTopSignedPetitions')
+        .then(response => response.json())
+        .then(data => {
+          const petitionsListDiv = document.getElementById('petitionsList');
+          data.forEach(petition => {
+            const petitionDiv = document.createElement('div');
+            petitionDiv.innerHTML = `<h3>${petition.title}</h3><p>${petition.description}</p>`;
+            petitionsListDiv.appendChild(petitionDiv);
+          });
+        })
+        .catch(error => console.error('Erreur lors de la récupération des pétitions:', error));
+    }
+
+    // Appel de la fonction pour afficher les pétitions au chargement de la page
+    window.onload = afficherPetitions;
+  </script>
+</body>
+
+</html>
