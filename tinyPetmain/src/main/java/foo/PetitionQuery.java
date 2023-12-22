@@ -62,7 +62,6 @@ public class PetitionQuery extends HttpServlet {
 		response.getWriter().print("<h2> Great, get the next 10 results now </h2>");
 
 		
-		// One way to paginate...
 		q = new Query("PU").setFilter(new FilterPredicate("__key__", FilterOperator.GREATER_THAN, last.getKey()));
 
 		pq = datastore.prepare(q);
