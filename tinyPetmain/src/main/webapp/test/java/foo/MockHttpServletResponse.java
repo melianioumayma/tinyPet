@@ -45,7 +45,7 @@ public class MockHttpServletResponse implements HttpServletResponse {
     return writerContent;
   }
   
-  // anything below is the default generated implementation
+
   
   @Override
   public void flushBuffer() throws IOException {

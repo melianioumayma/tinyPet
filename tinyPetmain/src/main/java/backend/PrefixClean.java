@@ -1,4 +1,4 @@
-package foo;
+package backend;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,8 +32,8 @@ import com.google.appengine.repackaged.com.google.datastore.v1.CompositeFilter;
 import com.google.appengine.repackaged.com.google.datastore.v1.Projection;
 import com.google.appengine.repackaged.com.google.datastore.v1.PropertyFilter;
 
-@WebServlet(name = "PetQuery", urlPatterns = { "/pquery" })
-public class PetitionQuery extends HttpServlet {
+@WebServlet(name = "PrefixClean", urlPatterns = { "/prefixclean" })
+public class PrefixClean extends HttpServlet {
 
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -42,39 +42,14 @@ public class PetitionQuery extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 
 
-		response.getWriter().print("<h2> finall 5 PU where key > P0 </h2>");
-
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Key k = KeyFactory.createKey("PU", "P0");
 
-		Query q = new Query("PU").setFilter(new FilterPredicate(Entity.KEY_RESERVED_PROPERTY, FilterOperator.GREATER_THAN, k));
-
+		Query q = new Query("Post");
 		PreparedQuery pq = datastore.prepare(q);
-		List<Entity> result = pq.asList(FetchOptions.Builder.withLimit(5));
-
-		response.getWriter().print("<li> result:" + result.size() + "<br>");
-		Entity last=null;
+		List<Entity> result = pq.asList(FetchOptions.Builder.withDefaults());
 		for (Entity entity : result) {
-			response.getWriter().print("<li>" + entity.getKey());
-			last=entity;
+			datastore.delete(entity.getKey());			
+			response.getWriter().print("<li> deleting" + entity.getKey()+"<br>");
 		}
-
-		response.getWriter().print("<h2> Great, get the next 10 results now </h2>");
-
-		
-		// One way to paginate...
-		q = new Query("PU").setFilter(new FilterPredicate("__key__", FilterOperator.GREATER_THAN, last.getKey()));
-
-		pq = datastore.prepare(q);
-		result = pq.asList(FetchOptions.Builder.withLimit(10));
-
-		response.getWriter().print("<li> result:" + result.size() + "<br>");
-		last=null;
-		for (Entity entity : result) {
-			response.getWriter().print("<li>" + entity.getKey());
-			last=entity;
-		}
-
-		
 	}
 }

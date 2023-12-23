@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <script src="https://unpkg.com/mithril/mithril.js"></script>
+
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f8f8f8;
+            }
+    
+            header {
+                background-color:#1E90FF;
+                color: white;
+                padding: 10px;
+                text-align: center;
+            }
+    
+            nav {
+                background-color:#1E90FF;
+                color: white;
+                padding: 10px;
+                text-align: center;
+            }
+    
+            nav a {
+                color: white;
+                text-decoration: none;
+                margin: 0 10px;
+            }
+    
+            .petition-form {
+                max-width: 600px;
+                margin: 20px auto;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+    
+            .petition-form label {
+                font-weight: bold;
+            }
+    
+            .petition-form input,
+            .petition-form textarea {
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 16px;
+                box-sizing: border-box;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+    
+            .petition-form button {
+                background-color: #333;
+                color: white;
+                padding: 12px 24px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 16px;
+            }
+    
+            .petition-form button:hover {
+                background-color: #555;
+            }
+        </style>
+    
+        <title>Créer Pétition</title>
+    </head>
+    <body>
+        <header>
+            <h1>Créer une Pétition</h1>
+        </header>
+    
+        <nav>
+            <button onclick="window.location.href='petition.html'">Créer une pétition</button>
+            <button onclick="window.location.href='#'">Mes pétitions</button>
+            <button onclick="window.location.href='petitions.html'">Les pétitions</button>
+        
+        </nav>
+    
+       
+    
+
+    <main>
+        <script>	
+            const id_user = sessionStorage.getItem("googleId");
+            const googleName = sessionStorage.getItem("googleName");
+            console.log(id_user)
+
+    // Définition du modèle de l'application Mithril
+    var Petition = {
+            title: '',
+            description: '',
+            tags: '',
+
+            submit: function() {
+                var data = {
+                    auteur :googleName,
+                    title: Petition.title,
+                    description: Petition.description,
+                    creatorId :id_user,
+                    status: 'active', 
+                    tags: Petition.tags.split(',') 
+                };
+
+                return m.request({
+                    method: "POST",
+                    url: "_ah/api/myApi/v1/addPetition",
+                    body: data
+                }).then(function(result) {
+                    console.log(" succès :", result);
+                    Petition.title = '';
+                    Petition.description = '';
+                    Petition.tags = '';
+                }).catch(function(error) {
+                    console.error("Erreur  :", error);
+                });
+            }
+        };
+
+
+var PetitionForm = {
+    view: function() {
+        return m('form', {
+            onsubmit: function(e) {
+                e.preventDefault();
+                Petition.submit();
+            }
+        }, [
+            m('label', { for: 'petitionTitle' }, 'Titre de la Pétition :'),
+            m('input[type=text]', {
+                id: 'petitionTitle',
+                name: 'petitionTitle',
+                required: true,
+                value: Petition.title,
+                oninput: function(e) {
+                    Petition.title = e.target.value;
+                }
+            }),
+
+            m('label', { for: 'petitionDescription' }, 'Description de la Pétition :'),
+            m('textarea', {
+                id: 'petitionDescription',
+                name: 'petitionDescription',
+                rows: '4',
+                required: true,
+                value: Petition.description,
+                oninput: function(e) {
+                    Petition.description = e.target.value;
+                }
+            }),
+
+            m('label', { for: 'petitionTags' }, 'Tags (séparés par des virgules) :'),
+            m('input[type=text]', {
+                id: 'petitionTags',
+                name: 'petitionTags',
+                value: Petition.tags,
+                oninput: function(e) {
+                    Petition.tags = e.target.value;
+                }
+            }),
+
+            m('button[type=submit]', 'Créer la Pétition')
+        ]);
+    }
+};
+
+m.mount(document.querySelector('main'), PetitionForm);
+
+
+</script>	
+
+</body>
+</html>
