@@ -50,21 +50,30 @@
     </style>
 </head>
 <body>
-    <header>
-        <h1> Pétition</h1>
-    </header>
+<header>
+    <h1> Pétition</h1>
+</header>
 
-    <div class="button-container">
-        <button onclick="window.location.href='g_login.html'">Se connecter</button>
-        <button onclick="window.location.href='#'">Mes pétitions</button>
-        <button onclick="window.location.href='petitions.html'">Les pétitions</button>
-        <button onclick="window.location.href='petition.html'">Créer une pétition</button>
+<div class="button-container">
+    <button onclick="window.location.href='g_login.html'">Se connecter</button>
+    <button onclick="window.location.href='#'">Mes pétitions</button>
+    <button onclick="window.location.href='petitions.html'">Les pétitions</button>
+    <button onclick="window.location.href='petition.html'">Créer une pétition</button>
 
-        
-    </div>
+    <!-- Profil link -->
+    <button id="profilButton" onclick="window.location.href='glogin-new.html'">Profil</button>
+</div>
 
+<script>
+    // Retrieve Google name from session storage
+    const googleName = sessionStorage.getItem("googleName");
 
-
+    // Set the text content of the Profil button based on googleName
+    const profilButton = document.getElementById("profilButton");
+    if (profilButton) {
+        profilButton.textContent = googleName ? googleName : "Profil";
+    }
+</script>
 </body>
 </html>
 
