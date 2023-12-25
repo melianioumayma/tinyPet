@@ -1,48 +1,48 @@
 <html lang="en">
-  <body>
-    <!-- <script src="https://unpkg.com/jwt-decode/build/jwt-decode.js"></script> -->
-    <script src="https://unpkg.com/jwt-decode@3.1.2/build/jwt-decode.js"></script>
+<body>
+<!-- <script src="https://unpkg.com/jwt-decode/build/jwt-decode.js"></script> -->
+<script src="https://unpkg.com/jwt-decode@3.1.2/build/jwt-decode.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<div id="g_id_onload"
+     data-client_id="909783088248-9rg5s8fdfkn402gkkiugmmbc3pjnm2e5.apps.googleusercontent.com"
+     data-callback="handleCredentialResponse">
+</div>
+<div class="g_id_signin" data-type="standard"></div>
+
+<p id="toto"></p>
+
+<script>
+  function handleCredentialResponse(response) {
+    console.log("callback called:"+response.credential)
+    // decodeJwtResponse() is a custom function defined by you
+    // to decode the credential response.
+    const responsePayload = jwt_decode(response.credential);
+
+    console.log("ID: " + responsePayload.sub);
+    console.log('Full Name: ' + responsePayload.name);
+    console.log('Given Name: ' + responsePayload.given_name);
+    console.log('Family Name: ' + responsePayload.family_name);
+    console.log("Image URL: " + responsePayload.picture);
+    console.log("Email: " + responsePayload.email);
+
+    const url = "_ah/api/myApi/v1/Hello"+'?access_token=' + response.credential
+    // fetch(url).then(response => response.text()).then(data => document.getElementById('toto').innerHTML = data)
+
+    sessionStorage.setItem("googleId", responsePayload.sub);
+    sessionStorage.setItem("googleName", responsePayload.name);
+    sessionStorage.setItem("LogInfo", response.credential);
+
+    window.location.href = "accueil_user.html";
 
 
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <div id="g_id_onload"
-         data-client_id="909783088248-9rg5s8fdfkn402gkkiugmmbc3pjnm2e5.apps.googleusercontent.com"
-         data-callback="handleCredentialResponse">
-    </div>
-    <div class="g_id_signin" data-type="standard"></div>
+    // Rediriger vers la deuxième page
+    window.location.href = "accueil.html";
 
-    <p id="toto"></p> 
-
-    <script>
-    function handleCredentialResponse(response) {
-        console.log("callback called:"+response.credential)
-        // decodeJwtResponse() is a custom function defined by you
-        // to decode the credential response.
-        const responsePayload = jwt_decode(response.credential);
-   
-        console.log("ID: " + responsePayload.sub);
-        console.log('Full Name: ' + responsePayload.name);
-        console.log('Given Name: ' + responsePayload.given_name);
-        console.log('Family Name: ' + responsePayload.family_name);
-        console.log("Image URL: " + responsePayload.picture);
-        console.log("Email: " + responsePayload.email);
-
-      const url = "_ah/api/myApi/v1/Hello"+'?access_token=' + response.credential
-      // fetch(url).then(response => response.text()).then(data => document.getElementById('toto').innerHTML = data)
-
-      sessionStorage.setItem("googleId", responsePayload.sub);
-      sessionStorage.setItem("googleName", responsePayload.name);
-      sessionStorage.setItem("LogInfo", response.credential);
-
-      window.location.href = "accueil_user.html";
+  }
+</script>
 
 
-      // Rediriger vers la deuxième page
-        window.location.href = "accueil_user.html";
-
-     }
-    </script>
-    
-
-  </body>
+</body>
 </html>
