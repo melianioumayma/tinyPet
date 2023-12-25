@@ -25,6 +25,13 @@
             width: 100%;
         }
 
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
         button {
             padding: 10px 20px;
             margin: 10px;
@@ -40,45 +47,24 @@
         button:hover {
             background-color: #555;
         }
-
-        section {
-            padding: 20px;
-            margin: 20px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
-        }
-
-        footer {
-            background-color: #444;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
     </style>
 </head>
 <body>
     <header>
-        <h1>Pétition</h1>
+        <h1> Pétition</h1>
     </header>
 
-    <button onclick="window.location.href='petition.html'">Créer une pétition</button>
-    <button onclick="window.location.href='#'">Mes pétitions</button>
-    <button onclick="window.location.href='petitions.html'">Les pétitions</button>
+    <div class="button-container">
+        <button onclick="window.location.href='g_login.html'">Se connecter</button>
+        <button onclick="window.location.href='#'">Mes pétitions</button>
+        <button onclick="window.location.href='petitions.html'">Les pétitions</button>
+        <button onclick="window.location.href='petition.html'">Créer une pétition</button>
 
-    <!-- Le reste de votre contenu irait ici -->
-
-    <script>
-        const googleName = sessionStorage.getItem("googleName");
         
-        // Set the text content of the Profil link based on googleName
-        const profilLink = document.getElementById("profilLink");
-        if (profilLink) {
-            profilLink.textContent = googleName;
-        }
-    </script>
+    </div>
+
+
+
 </body>
 </html>
+

@@ -25,8 +25,8 @@
 
         <checkstyle.skip>true</checkstyle.skip>
 
-        <endpoints.project.id>TinyPet</endpoints.project.id>
-        <endpoints.project.number>699772286593</endpoints.project.number>
+        <endpoints.project.id>tinypet-408401</endpoints.project.id>
+        <endpoints.project.number>909783088248</endpoints.project.number>
     </properties>
 
     <dependencies>
@@ -94,8 +94,8 @@
                 <artifactId>appengine-maven-plugin</artifactId>
                 <version>2.2.0</version>
                 <configuration>
-                    <projectId>${endpoints.project.number}</projectId>
-                    <version>${endpoints.project.id}</version>
+                    <projectId>909783088248</projectId>
+                    <version>tinypet-408401</version>
                 </configuration>
             </plugin>
 
@@ -105,7 +105,7 @@
                 <artifactId>endpoints-framework-maven-plugin</artifactId>
                 <version>2.0.1</version>
                 <configuration>
-                    <hostname>${endpoints.project.id}.appspot.com</hostname>
+                    <hostname>tinypet-408401.appspot.com</hostname>
                 </configuration>
             </plugin>
 
