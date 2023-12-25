@@ -24,7 +24,7 @@
 
 
 	<welcome-file-list>
-		<welcome-file>accueil_user.html</welcome-file>
+		<welcome-file>accueil.html</welcome-file>
 	</welcome-file-list>
 
 	<!-- [START api_management] -->
