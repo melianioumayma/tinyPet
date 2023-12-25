@@ -1,4 +1,4 @@
-package backend;
+package foo;
 
 public class PostMessage {
 	public String owner;

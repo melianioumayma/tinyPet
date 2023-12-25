@@ -1,4 +1,4 @@
-package backend;
+package foo;
 
 import java.util.Date;
 import java.util.HashSet;

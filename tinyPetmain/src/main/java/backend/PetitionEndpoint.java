@@ -1,4 +1,4 @@
-package foo;
+/*package foo;
 
 import com.google.api.server.spi.auth.common.User;
 import com.google.api.server.spi.config.Api;
@@ -202,5 +202,5 @@ public class PetitionEndpoint {
         return petitionsByTag;
     }
 }
-
+*/
 
