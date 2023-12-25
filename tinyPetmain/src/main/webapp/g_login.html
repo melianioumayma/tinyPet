@@ -27,14 +27,17 @@
         console.log("Image URL: " + responsePayload.picture);
         console.log("Email: " + responsePayload.email);
 
+      const url = "_ah/api/myApi/v1/Hello"+'?access_token=' + response.credential
+      // fetch(url).then(response => response.text()).then(data => document.getElementById('toto').innerHTML = data)
 
-        // const url = "_ah/api/myApi/v1/Hello"+'?access_token=' + response.credential
-        // fetch(url).then(response => response.text()).then(data => document.getElementById('toto').innerHTML = data)
-        // Stocker les données dans sessionStorage
-        sessionStorage.setItem("googleId", responsePayload.sub);
-        sessionStorage.setItem("googleName", responsePayload.name);
+      sessionStorage.setItem("googleId", responsePayload.sub);
+      sessionStorage.setItem("googleName", responsePayload.name);
+      sessionStorage.setItem("LogInfo", response.credential);
 
-        // Rediriger vers la deuxième page
+      window.location.href = "accueil_user.html";
+
+
+      // Rediriger vers la deuxième page
         window.location.href = "accueil_user.html";
 
      }
