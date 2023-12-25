@@ -1,13 +1,30 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright 2016 Google Inc.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
 <project>
     <modelVersion>4.0.0</modelVersion>
-
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
 
-    <groupId>momo54</groupId>
+    <groupId>melianioumayma</groupId>
     <artifactId>WebAndCloud</artifactId>
 
+    <!--
+      The parent pom defines common style checks and testing strategies for our samples.
+      Removing or replacing it should not effect the execution of the samples in anyway.
+    -->
     <parent>
         <groupId>com.google.cloud.samples</groupId>
         <artifactId>shared-configuration</artifactId>
@@ -25,22 +42,23 @@
 
         <checkstyle.skip>true</checkstyle.skip>
 
-        <endpoints.project.id>tinypet-408401</endpoints.project.id>
-        <endpoints.project.number>909783088248</endpoints.project.number>
+        <endpoints.project.id>tinypet-409213</endpoints.project.id>
     </properties>
 
     <dependencies>
-        <!-- Dependencies for Google Cloud Endpoints -->
+        <!-- Compile/runtime dependencies -->
         <dependency>
             <groupId>com.google.endpoints</groupId>
             <artifactId>endpoints-framework</artifactId>
             <version>${endpoints.framework.version}</version>
         </dependency>
+        <!-- [START api_management] -->
         <dependency>
             <groupId>com.google.endpoints</groupId>
             <artifactId>endpoints-management-control-appengine-all</artifactId>
             <version>1.0.12</version>
         </dependency>
+        <!-- [END api_management] -->
         <dependency>
             <groupId>com.google.appengine</groupId>
             <artifactId>appengine-api-1.0-sdk</artifactId>
@@ -59,20 +77,21 @@
             <version>1</version>
         </dependency>
 
-        <!-- Other dependencies, if any -->
-        <!-- Example: JUnit for testing -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.13</version>
             <scope>test</scope>
         </dependency>
+
+
     </dependencies>
 
     <build>
-        <outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory>
+        <!-- for hot reload of the web application-->
+        <outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes
+        </outputDirectory>
         <plugins>
-            <!-- Maven War Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
@@ -87,29 +106,27 @@
                     </webResources>
                 </configuration>
             </plugin>
-
-            <!-- Google Cloud App Engine Maven Plugin -->
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>appengine-maven-plugin</artifactId>
                 <version>2.2.0</version>
                 <configuration>
-                    <projectId>909783088248</projectId>
-                    <version>tinypet-408401</version>
+                    <!-- deploy configuration -->
+                    <projectId>GCLOUD_CONFIG</projectId>
+                    <version>GCLOUD_CONFIG</version>
                 </configuration>
             </plugin>
-
-            <!-- Google Cloud Endpoints Maven Plugin -->
+            <!-- [START endpoints_plugin] -->
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>endpoints-framework-maven-plugin</artifactId>
                 <version>2.0.1</version>
                 <configuration>
-                    <hostname>tinypet-408401.appspot.com</hostname>
+                    <!-- plugin configuration -->
+                    <hostname>${endpoints.project.id}.appspot.com</hostname>
                 </configuration>
             </plugin>
-
-            <!-- Maven Versions Plugin for displaying dependency updates -->
+            <!-- [END endpoints_plugin] -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
