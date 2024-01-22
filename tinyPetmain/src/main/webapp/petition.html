@@ -1,13 +1,9 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
-    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
-    <script src="https://unpkg.com/mithril/mithril.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -17,27 +13,20 @@
         }
 
         header {
-            background-color:#1E90FF;
+            background-color: #1E90FF;
             color: white;
             padding: 10px;
             text-align: center;
         }
 
         nav {
-            background-color:#1E90FF;
+            background-color: #1E90FF;
             color: white;
             padding: 10px;
             text-align: center;
         }
 
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 10px;
-        }
-
-        /* Styles pour le formulaire */
-        .petition-form {
+        .main-container {
             max-width: 600px;
             margin: 20px auto;
             padding: 20px;
@@ -45,12 +34,11 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        .petition-form label {
+        .name {
             font-weight: bold;
         }
 
-        .petition-form input,
-        .petition-form textarea {
+        .form-control {
             width: 100%;
             padding: 10px;
             margin-bottom: 16px;
@@ -59,7 +47,12 @@
             border-radius: 4px;
         }
 
-        .petition-form button {
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .btn-primary {
             background-color: #333;
             color: white;
             padding: 12px 24px;
@@ -69,13 +62,13 @@
             font-size: 16px;
         }
 
-        .petition-form button:hover {
+        .btn-primary:hover {
             background-color: #555;
         }
     </style>
-
     <title>Créer Pétition</title>
 </head>
+
 <body>
 <header>
     <nav>
@@ -85,107 +78,76 @@
         <a href="g_login.html">Se connecter</a>
     </nav>
 </header>
+
 <main>
-    <script>
-        const id_user = sessionStorage.getItem("googleId");
-        const googleName = sessionStorage.getItem("googleName");
-        console.log(id_user)
+    <section class="petitionc">
+        <form onsubmit="submitPetition(event)">
+            <label for="petitionTitle" class="name">Titre de la Pétition:</label>
+            <input type="text" id="petitionTitle" name="petitionTitle" class="form-control" required
+                   oninput="updatePetitionTitle(event)">
 
-        // Définition du modèle de l'application Mithril
-        var Petition = {
-            title: '',
-            description: '',
-            tags: '',
+            <label for="petitionDescription" class="name">Description de la Pétition:</label>
+            <textarea id="petitionDescription" name="petitionDescription" class="form-control" rows="4" required
+                      oninput="updatePetitionDescription(event)"></textarea>
 
-            submit: function() {
-                var data = {
-                    auteur :googleName,
-                    title: Petition.title,
-                    description: Petition.description,
-                    creatorId :id_user,
-                    status: 'active', // Statut de la pétition
-                    tags: Petition.tags.split(',') // Séparation des tags par des virgules
-                };
+            <label for="petitionTags" class="form-label">Tags:</label>
+            <input type="text" id="petitionTags" name="petitionTags" class="form-control"
+                   oninput="updatePetitionTags(event)">
 
-                return m.request({
-                    method: "POST",
-                    url: "_ah/api/myApi/v1/addPetition",
-                    body: data
-                }).then(function(result) {
-                    console.log("Pétition soumise avec succès :", result);
-                    // Réinitialisation des champs du formulaire après la soumission
-                    Petition.title = '';
-                    Petition.description = '';
-                    Petition.tags = '';
-                }).catch(function(error) {
-                    console.error("Erreur lors de la soumission de la pétition :", error);
-                });
-            }
-        };
-
-
-        // Composant Mithril pour le formulaire de la pétition
-        var PetitionForm = {
-            view: function() {
-                return m('form', {
-                    onsubmit: function(e) {
-                        e.preventDefault();
-                        Petition.submit();
-                    }
-                }, [
-                    m('div', {class: 'row'},
-                        [
-                            m('div', {class: 'col-md-3'},
-                                [m('label', { for: 'petitionTitle', class: 'form-label' }, 'Titre de la Pétition :'),
-                                    m('input[type=text]', {
-                                        id: 'petitionTitle',
-                                        name: 'petitionTitle',
-                                        class: 'form-control',
-                                        required: true,
-                                        value: Petition.title,
-                                        oninput: function(e) {
-                                            Petition.title = e.target.value;
-                                        }})
-                                ]),
-                            m('div', {class: 'col-md-3'},
-                                [m('label', { for: 'petitionDescription', class: 'form-label' }, 'Description de la Pétition :'),
-                                    m('textarea', {
-                                        id: 'petitionDescription',
-                                        name: 'petitionDescription',
-                                        class: 'form-control',
-                                        rows: '4',
-                                        required: true,
-                                        value: Petition.description,
-                                        oninput: function(e) {
-                                            Petition.description = e.target.value;
-                                        }
-                                    })]
-                            ),
-                            m('div', {class: 'col-md-3'},
-                                [m('label', { for: 'petitionTags', class: 'form-label'  }, 'Tags (séparés par des virgules) :'),
-                                    m('input[type=text]', {
-                                        id: 'petitionTags',
-                                        name: 'petitionTags',
-                                        class: 'form-control',
-                                        value: Petition.tags,
-                                        oninput: function(e) {
-                                            Petition.tags = e.target.value;
-                                        }
-                                    })
-                                ]),
-                            m('div', {class: 'col-md-6'}),
-                            m('div', {class: 'col-md-3'}),
-                            m('button[type=submit]', {class: 'btn btn-primary col-md-3'}, 'Créer la Pétition')])
-                ]);
-            }
-        };
-
-        // Montage du composant Mithril
-        // m.mount(document.body, PetitionForm);
-        m.mount(document.querySelector('main'), PetitionForm);
-
-
-    </script>
+            <button type="submit" class="btn btn-primary">Créer la Pétition</button>
+        </form>
+    </section>
 </main>
+
+<script>
+    const userId = sessionStorage.getItem("googleId");
+    const googleName = sessionStorage.getItem("googleName");
+
+    let petitionTitre = '';
+    let petitionDescription = '';
+    let petitionTags = '';
+
+    function updatePetitionTitle(event) {
+        petitionTitre = event.target.value;
+    }
+
+    function updatePetitionDescription(event) {
+        petitionDescription = event.target.value;
+    }
+
+    function updatePetitionTags(event) {
+        petitionTags = event.target.value;
+    }
+
+    function submitPetition(event) {
+        event.preventDefault();
+        const data = {
+            auteur: googleName,
+            titre: petitionTitre,
+            description: petitionDescription,
+            creatorId: userId,
+            tags: petitionTags
+        };
+
+        fetch("https://tinypet-409213.ew.r.appspot.com/_ah/api/myApi/v1/addPetition", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        })
+            .then(response => response.json())
+            .then(result => {
+                console.log("Success:", result);
+                petitionTitre = '';
+                petitionDescription = '';
+                petitionTags = '';
+            })
+            .catch(error => {
+                console.error("Error submitting petition:", error);
+            });
+    }
+</script>
 </body>
+
 </html>
