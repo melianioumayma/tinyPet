@@ -37,23 +37,23 @@ import com.google.appengine.api.datastore.QueryResultList;
 import com.google.appengine.api.datastore.Transaction;
 
 @Api(name = "myApi",
-     version = "v1",
-     audiences = "1086302335339-m9ef92cv85rfgi6pb872ii1onead5504.apps.googleusercontent.com",
-  	 clientIds = {"1086302335339-m9ef92cv85rfgi6pb872ii1onead5504.apps.googleusercontent.com",
-        "1086302335339-m9ef92cv85rfgi6pb872ii1onead5504.apps.googleusercontent.com"},
-     namespace =
-     @ApiNamespace(
-		   ownerDomain = "helloworld.example.com",
-		   ownerName = "helloworld.example.com",
-		   packagePath = "")
-     )
+		version = "v1",
+		audiences = "836560140856-j0llbtlr5h6b1mubnm9jc3j2s9rfqan4.apps.googleusercontent.com",
+		clientIds = {"836560140856-j0llbtlr5h6b1mubnm9jc3j2s9rfqan4.apps.googleusercontent.com",
+				"836560140856-j0llbtlr5h6b1mubnm9jc3j2s9rfqan4.apps.googleusercontent.com" },
+		namespace =
+		@ApiNamespace(
+				ownerDomain = "helloworld.example.com",
+				ownerName = "helloworld.example.com",
+				packagePath = "")
+)
 
 public class ScoreEndpoint {
 
 
 	Random r = new Random();
 
-    // remember: return Primitives and enums are not allowed. 
+	// remember: return Primitives and enums are not allowed.
 	@ApiMethod(name = "getRandom", httpMethod = HttpMethod.GET)
 	public RandomResult random() {
 		return new RandomResult(r.nextInt(6) + 1);
@@ -61,12 +61,12 @@ public class ScoreEndpoint {
 
 	@ApiMethod(name = "hello", httpMethod = HttpMethod.GET)
 	public User Hello(User user) throws UnauthorizedException {
-        if (user == null) {
+		if (user == null) {
 			throw new UnauthorizedException("Invalid credentials");
 		}
-        System.out.println("Yeah:"+user.toString());
+		System.out.println("Yeah:"+user.toString());
 		return user;
-	} 
+	}
 
 	@ApiMethod(name = "scores", httpMethod = HttpMethod.GET)
 	public List<Entity> scores() {
@@ -92,7 +92,7 @@ public class ScoreEndpoint {
 	public List<Entity> myscores(@Named("name") String name) {
 		Query q = new Query("Score").setFilter(new FilterPredicate("name", FilterOperator.EQUAL, name)).addSort("score",
 				SortDirection.DESCENDING);
-        //Query q = new Query("Score").setFilter(new FilterPredicate("name", FilterOperator.EQUAL, name));
+		//Query q = new Query("Score").setFilter(new FilterPredicate("name", FilterOperator.EQUAL, name));
 
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		PreparedQuery pq = datastore.prepare(q);
@@ -117,28 +117,28 @@ public class ScoreEndpoint {
 	@ApiMethod(name = "mypost", httpMethod = HttpMethod.GET)
 	public CollectionResponse<Entity> mypost(@Named("name") String name, @Nullable @Named("next") String cursorString) {
 
-	    Query q = new Query("Post").setFilter(new FilterPredicate("owner", FilterOperator.EQUAL, name));
+		Query q = new Query("Post").setFilter(new FilterPredicate("owner", FilterOperator.EQUAL, name));
 
-	
-	    
-	    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-	    PreparedQuery pq = datastore.prepare(q);
-	    
-	    FetchOptions fetchOptions = FetchOptions.Builder.withLimit(2);
-	    
-	    if (cursorString != null) {
-		fetchOptions.startCursor(Cursor.fromWebSafeString(cursorString));
+
+
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		PreparedQuery pq = datastore.prepare(q);
+
+		FetchOptions fetchOptions = FetchOptions.Builder.withLimit(2);
+
+		if (cursorString != null) {
+			fetchOptions.startCursor(Cursor.fromWebSafeString(cursorString));
 		}
-	    
-	    QueryResultList<Entity> results = pq.asQueryResultList(fetchOptions);
-	    cursorString = results.getCursor().toWebSafeString();
-	    
-	    return CollectionResponse.<Entity>builder().setItems(results).setNextPageToken(cursorString).build();
-	    
+
+		QueryResultList<Entity> results = pq.asQueryResultList(fetchOptions);
+		cursorString = results.getCursor().toWebSafeString();
+
+		return CollectionResponse.<Entity>builder().setItems(results).setNextPageToken(cursorString).build();
+
 	}
-    
+
 	@ApiMethod(name = "getPost",
-		   httpMethod = ApiMethod.HttpMethod.GET)
+			httpMethod = ApiMethod.HttpMethod.GET)
 	public CollectionResponse<Entity> getPost(User user, @Nullable @Named("next") String cursorString)
 			throws UnauthorizedException {
 
@@ -147,9 +147,9 @@ public class ScoreEndpoint {
 		}
 
 		Query q = new Query("Post").
-		    setFilter(new FilterPredicate("owner", FilterOperator.EQUAL, user.getEmail()));
+				setFilter(new FilterPredicate("owner", FilterOperator.EQUAL, user.getEmail()));
 
-	
+
 
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		PreparedQuery pq = datastore.prepare(q);
@@ -166,52 +166,33 @@ public class ScoreEndpoint {
 		return CollectionResponse.<Entity>builder().setItems(results).setNextPageToken(cursorString).build();
 	}
 
-	@ApiMethod(name = "postMsg", httpMethod = HttpMethod.POST)
-	public Entity postMsg(PostPetition petition) throws UnauthorizedException {
-     
-          System.out.println(petition.title);
-            Entity e = new Entity("Petition"); 
-            e.setProperty("title", petition.title);
-            e.setProperty("description", petition.description);
-            e.setProperty("creatorId", petition.creatorId);
-            e.setProperty("status", petition.status);
-            e.setProperty("tags", petition.tags);
-            e.setProperty("creationDate", new Date()); // Date de création de la pétition
-        
-            DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-            datastore.put(e); 
-        
-            return e;
+
+
+	@ApiMethod(name = "ajoutPetition", httpMethod = HttpMethod.POST)
+	public Entity ajoutPetitionPetition(fPetition petition) throws UnauthorizedException {
+
+
+		Entity e = new Entity("Petition");
+		e.setProperty("createur", petition.createur);
+		e.setProperty("creatorId", petition.creatorId);
+		e.setProperty("titre", petition.titre);
+		e.setProperty("description", petition.description);
+		e.setProperty("tags", petition.tags);
+		e.setProperty("creationDate", new Date());
+
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		datastore.put(e);
+
+		return e;
 	}
+	@ApiMethod(name = "gettopTenPetitions", httpMethod = HttpMethod.GET)
+	public List<Entity> topTenPetitions() {
+		Query query = new Query("Petition").addSort("creationDate", SortDirection.DESCENDING);
 
-
-    @ApiMethod(name = "addPetition", httpMethod = HttpMethod.POST)
-public Entity addPetition(PostPetition petition) throws UnauthorizedException {
-   
-
-    Entity e = new Entity("Petition"); 
-    e.setProperty("auteur", petition.auteur);
-    e.setProperty("title", petition.title);
-    e.setProperty("description", petition.description);
-    e.setProperty("creatorId", petition.creatorId);
-    e.setProperty("status", petition.status);
-    e.setProperty("tags", petition.tags);
-    e.setProperty("creationDate", new Date()); 
-
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    datastore.put(e); 
-
-    return e; 
-}
-@ApiMethod(name = "topTenPetitions", httpMethod = HttpMethod.GET)
-public List<Entity> topTenPetitions() {
-    Query q = new Query("Petition").addSort("creationDate", SortDirection.DESCENDING);
-
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    PreparedQuery pq = datastore.prepare(q);
-    List<Entity> result = pq.asList(FetchOptions.Builder.withLimit(10));
-    return result;
-}
-
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		PreparedQuery q = datastore.prepare(query);
+		List<Entity> topPetitions = q.asList(FetchOptions.Builder.withLimit(10));
+		return topPetitions;
+	}
 
 }

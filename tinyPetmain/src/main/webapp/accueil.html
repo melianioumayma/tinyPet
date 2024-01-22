@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Pétitions</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
-    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
-    <script src="https://unpkg.com/mithril/mithril.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <style>
         body {
@@ -17,8 +14,7 @@
             background-color: #f8f8f8;
         }
 
-        header,
-        nav {
+        header, nav {
             background-color: #1E90FF;
             color: white;
             padding: 10px;
@@ -40,8 +36,7 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        select,
-        input[type="text"] {
+        select, input[type="text"] {
             padding: 8px;
             border-radius: 4px;
             margin-bottom: 16px;
@@ -66,7 +61,6 @@
         }
     </style>
 </head>
-
 <body>
 <header>
     <nav class="button-container">
@@ -79,7 +73,7 @@
 
 <section class="search-section">
     <nav>
-        <label for="tagSearch">Chercher par tag :</label>
+        <label for="tagSearch">Rechercher par tag :</label>
         <input type="text" id="tagSearch" name="tagSearch" placeholder="Entrez le tag">
         <button type="submit" class="button is-primary">Recherche</button>
     </nav>
@@ -89,8 +83,6 @@
     <script>
         const userId = sessionStorage.getItem("googleId");
         const googleName = sessionStorage.getItem("googleName");
-        console.log(userId);
-
 
         var PetitionComponent = {
             view: function(vnode) {
@@ -98,7 +90,7 @@
 
                 return m('div', { class: 'column is-one-third' }, [
                     m('div', { class: 'box' }, [
-                        m('h1', 'Auteur : ' + petition.properties.auteur),
+                        m('h1', 'Auteur : ' + petition.properties.createur),
                         m('h1', petition.properties.titre),
                         m('p', petition.properties.description),
                         m('p', 'Tags: ' + petition.properties.tags.join(', ')),
@@ -117,7 +109,6 @@
             }
         };
 
-        // Functions
         function isLoggedIn() {
             return !!userId;
         }
@@ -130,45 +121,19 @@
             window.location.href = '/g_login.html';
         }
 
-        // Petitions Component
-        var PetitionsComponent = {
+        var Petitions = {
             list: [],
             loadList: function() {
                 return m.request({
                     method: "GET",
-                    //url:
                 })
                     .then(function(result) {
-                        PetitionsComponent.list = result.items || [];
+                        Petitions.list = result.items || [];
                         console.log("got:", result.items);
                     });
-            },
-
-            view: function() {
-                return m('div', { class: 'container' }, [
-                    m("h1", { class: 'title' }, 'Pétitions'),
-                    m('div', { class: 'columns is-multiline' }, PetitionsComponent.list.map(function(petition) {
-                        return m(PetitionComponent, { petition: petition });
-                    }))
-                ]);
             }
         };
 
-        // Main App Component
-        var App = {
-            oninit: PetitionsComponent.loadList,
-            view: function() {
-                return m('div', { class: 'container' }, [
-                    m('div', { class: 'tile is-ancestor' }, [
-                        m("div", { class: 'tile' }, m('div', { class: 'tile is-child box' }, m(PetitionsComponent))),
-                    ])
-                ]);
-            }
-        };
-
-        // Mount the App
-        m.mount(document.querySelector('main'), App);
     </script>
-</main>
 </body>
 </html>
